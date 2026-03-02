@@ -1,0 +1,188 @@
+# ============================================================
+# ASP.NET / .NET
+# ============================================================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+*.nupkg
+*.snupkg
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+_Chutzpah*
+ipch/
+$tf/
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
+PublishScripts/
+*.nuget.props
+*.nuget.targets
+dlldata.c
+BenchmarkDotNet.Artifacts/
+*.[Rr]elease/
+*.[Dd]ebug/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+TestResult.xml
+*.Coverage
+coverage/
+*.coveragexml
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+*.MM.*
+AutoTest.Net/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+[Tt]est[Rr]esult*/
+.ncrunchsolution
+*.dotCover
+
+# ============================================================
+# Vue 3 / Node.js / Frontend
+# ============================================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+.cache/
+.parcel-cache/
+.nuxt/
+.next/
+.output/
+.vuepress/dist/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vite/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# npm / yarn / pnpm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================================
+# Docker
+# ============================================================
+.docker/
+docker-compose.override.yml
+docker-compose.*.local.yml
+*.dockerignore
+
+# ============================================================
+# Variáveis de ambiente e segredos
+# ============================================================
+.env
+.env.*
+!.env.example
+!.env.template
+*.env
+appsettings.*.json
+!appsettings.Development.json
+secrets.json
+local.settings.json
+*.pfx
+*.p12
+*.key
+*.pem
+*.crt
+*.cer
+
+# ============================================================
+# Logs gerais
+# ============================================================
+logs/
+*.log
+*.log.*
+
+# ============================================================
+# IDEs e editores
+# ============================================================
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+
+# ============================================================
+# OS
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================================
+# Outros
+# ============================================================
+*.bak
+*.orig
+*.patch
+*.rej
+tmp/
+temp/
+**/XINSTIA/
+XINSTIA/

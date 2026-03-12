@@ -1,40 +1,37 @@
 <template lang="pug">
-div(class="flex min-h-screen flex-col bg-background")
-  //- Top bar
-  header(class="flex h-14 items-center justify-between px-4 sm:px-6")
-    RouterLink(
-      :to="{ name: 'home' }"
-      class="flex items-center gap-2 text-sm font-semibold text-foreground"
-    )
-      span(class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground")
-        Film(class="size-3.5")
-      | Roteirize
-    ThemeToggle
-
-  //- Main content — centered card
-  main(class="flex flex-1 items-center justify-center px-4 py-12")
-    div(class="w-full max-w-md")
-      //- Card header
-      div(v-if="title || subtitle" class="mb-8 text-center")
-        h1(v-if="title" class="text-2xl font-semibold tracking-tight text-foreground") {{ title }}
-        p(v-if="subtitle" class="mt-1.5 text-sm text-muted-foreground") {{ subtitle }}
-
-      //- Card body
-      div(class="rounded-2xl border border-border bg-card p-8 shadow-xs")
-        slot
-
-  //- Footer
-  footer(class="py-6 text-center text-xs text-muted-foreground")
-    | © {{ new Date().getFullYear() }} Roteirize. Todos os direitos reservados.
+div
+  //- Minimal header
+  header.secondary-container
+    nav
+      RouterLink.row.no-space.middle-align(:to="{ name: 'home' }")
+        h6.primary-text.bold Roteirize
+      div.max
+      button.circle.transparent(@click="themeStore.toggle()")
+        i {{ themeStore.isDark ? 'light_mode' : 'dark_mode' }}
+  //- Centered content card
+  main
+    div.grid.center-align
+      div.s12.m8.l6
+        article.medium-elevate.large-padding
+          h5.center-align {{ title }}
+          p.center-align(v-if="subtitle") {{ subtitle }}
+          slot
+  //- Minimal footer
+  footer.responsive.center-align
+    p.small-text © {{ currentYear }} Roteirize
 </template>
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { Film } from 'lucide-vue-next'
-import ThemeToggle from '@/components/ui/ThemeToggle.vue'
+import { useThemeStore } from '@/stores/theme'
 
-defineProps<{
-  title?: string
+interface Props {
+  title: string
   subtitle?: string
-}>()
+}
+
+defineProps<Props>()
+
+const themeStore = useThemeStore()
+const currentYear = new Date().getFullYear()
 </script>

@@ -1,117 +1,114 @@
 <template lang="pug">
-AuthLayout(
-  title="Crie sua conta"
-  subtitle="Comece a criar roteiros incríveis hoje mesmo"
-)
-  form(@submit.prevent="handleRegister" class="flex flex-col gap-4")
-    AppAlert(v-if="authStore.error" variant="error" :description="authStore.error")
+AuthLayout(title="Criar Conta" subtitle="Cadastre-se para começar a planejar suas viagens")
+  //- Error snackbar
+  div.snackbar.error(:class="{ 'active': !!authStore.error }")
+    i warning
+    span {{ authStore.error }}
 
+  form(@submit.prevent="handleRegister")
     AppInput(
-      id="name"
+      ref="nameRef"
       v-model="name"
-      type="text"
       label="Nome completo"
       placeholder="Seu nome"
+      prefixIcon="person"
       autocomplete="name"
-      :required="true"
+      required
     )
-
     AppInput(
-      id="email"
+      ref="emailRef"
       v-model="email"
       type="email"
       label="E-mail"
-      placeholder="voce@exemplo.com"
+      placeholder="seu@email.com"
+      prefixIcon="mail"
       autocomplete="email"
-      :required="true"
+      required
     )
-
     AppInput(
-      id="password"
+      ref="passwordRef"
       v-model="password"
       type="password"
       label="Senha"
       placeholder="Mínimo 8 caracteres"
+      prefixIcon="lock"
       autocomplete="new-password"
-      hint="Mínimo de 8 caracteres"
-      :required="true"
+      required
     )
-
     AppInput(
-      id="confirm-password"
+      ref="confirmPasswordRef"
       v-model="confirmPassword"
       type="password"
       label="Confirmar senha"
-      placeholder="Repita sua senha"
+      placeholder="Repita a senha"
+      prefixIcon="lock"
       autocomplete="new-password"
-      :error="confirmError"
-      :required="true"
+      required
     )
-
-    label(class="flex items-start gap-2.5 cursor-pointer")
-      input(
-        type="checkbox"
-        v-model="acceptedTerms"
-        required
-        class="mt-0.5 size-4 rounded border-input accent-primary"
-      )
-      span(class="text-xs text-muted-foreground")
-        | Aceito os&nbsp;
-        a(href="#" class="text-primary hover:underline") Termos de Uso
-        | &nbsp;e a&nbsp;
-        a(href="#" class="text-primary hover:underline") Política de Privacidade
-
+    AppCheckbox(
+      ref="termsRef"
+      v-model="termsAccepted"
+      label="Aceito os Termos de Uso e Política de Privacidade"
+      required
+    )
     AppButton(
       type="submit"
       :loading="authStore.isLoading"
-      :disabled="!acceptedTerms"
-      class="w-full justify-center mt-1"
-    )
-      | Criar conta
+      fullWidth
+    ) Cadastrar
 
-  div(class="mt-6 text-center text-sm text-muted-foreground")
-    | Já tem uma conta?&nbsp;
-    RouterLink(
-      :to="{ name: 'login' }"
-      class="font-medium text-primary hover:text-primary/80 transition-colors"
-    ) Entrar
+  div.divider
+
+  p.center-align
+    | Já tem uma conta?
+    |
+    RouterLink.link(:to="{ name: 'login' }") Entrar
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import AppInput from '@/components/ui/AppInput.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppAlert from '@/components/ui/AppAlert.vue'
+import AppInput from '@/components/appComponents/AppInput.vue'
+import AppButton from '@/components/appComponents/AppButton.vue'
+import AppCheckbox from '@/components/appComponents/AppCheckbox.vue'
+import { useAuthStore } from '@/stores/auth'
+import { validateFields } from '@/shared/utils'
+import type { ValidatableRef } from '@/shared/utils'
 
-const authStore = useAuthStore()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const name = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const acceptedTerms = ref(false)
+const termsAccepted = ref(false)
 
-const confirmError = ref('')
+const nameRef = ref<ValidatableRef | null>(null)
+const emailRef = ref<ValidatableRef | null>(null)
+const passwordRef = ref<ValidatableRef | null>(null)
+const confirmPasswordRef = ref<ValidatableRef | null>(null)
+const termsRef = ref<ValidatableRef | null>(null)
 
 const handleRegister = async () => {
-  confirmError.value = ''
-  if (password.value !== confirmPassword.value) {
-    confirmError.value = 'As senhas não coincidem'
-    return
-  }
+  if (!validateFields([nameRef.value, emailRef.value, passwordRef.value, confirmPasswordRef.value, termsRef.value])) return
+
   if (password.value.length < 8) {
-    confirmError.value = 'A senha deve ter pelo menos 8 caracteres'
+    authStore.error = 'A senha deve ter no mínimo 8 caracteres'
     return
   }
+
+  if (password.value !== confirmPassword.value) {
+    authStore.error = 'As senhas não conferem'
+    return
+  }
+
   try {
     await authStore.register(name.value, email.value, password.value)
     router.push({ name: 'dashboard' })
   } catch {
-    // error is set in the store
+    // error is handled by the store
   }
 }
 </script>

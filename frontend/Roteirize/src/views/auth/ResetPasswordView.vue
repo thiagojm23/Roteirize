@@ -1,114 +1,116 @@
 <template lang="pug">
-AuthLayout(
-  :title="success ? 'Senha redefinida!' : 'Redefinir senha'"
-  :subtitle="success ? '' : 'Crie uma nova senha segura para sua conta'"
-)
+AuthLayout(title="Redefinir Senha" subtitle="Crie uma nova senha para sua conta")
   //- Invalid token state
-  div(v-if="invalidToken" class="flex flex-col items-center gap-4 text-center")
-    div(class="flex size-14 items-center justify-center rounded-full bg-destructive/10")
-      AlertTriangle(class="size-7 text-destructive")
-    p(class="text-sm text-muted-foreground")
-      | Link inválido ou expirado. Solicite um novo link de redefinição.
-    RouterLink(:to="{ name: 'forgot-password' }")
-      AppButton(variant="outline" class="justify-center") Solicitar novo link
+  template(v-if="tokenInvalid")
+    article.error-container.center-align
+      i.extra error
+      h5 Token inválido
+      p O link de recuperação é inválido ou expirou.
+    nav.center-align
+      RouterLink.button(:to="{ name: 'forgot-password' }")
+        i mail
+        span Solicitar novo link
 
   //- Success state
-  div(v-else-if="success" class="flex flex-col items-center gap-4 text-center")
-    div(class="flex size-14 items-center justify-center rounded-full bg-primary/10")
-      CheckCircle(class="size-7 text-primary")
-    div
-      p(class="text-sm font-medium text-foreground") Senha alterada com sucesso!
-      p(class="mt-1 text-xs text-muted-foreground")
-        | Redirecionando para o login em instantes...
-    RouterLink(
-      :to="{ name: 'login' }"
-      class="flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors"
-    )
-      | Ir para o login agora
+  template(v-else-if="resetSuccess")
+    article.primary-container.center-align
+      i.extra.primary-text check_circle
+      h5 Senha redefinida!
+      p Sua senha foi alterada com sucesso.
+      p Redirecionando para o login em {{ countdown }}s...
+    nav.center-align
+      RouterLink.button(:to="{ name: 'login' }")
+        i arrow_back
+        span Ir para login
 
   //- Form state
-  form(v-else @submit.prevent="handleSubmit" class="flex flex-col gap-4")
-    AppAlert(v-if="authStore.error" variant="error" :description="authStore.error")
+  template(v-else)
+    div.snackbar.error(:class="{ 'active': !!authStore.error }")
+      i warning
+      span {{ authStore.error }}
 
-    AppInput(
-      id="password"
-      v-model="password"
-      type="password"
-      label="Nova senha"
-      placeholder="Mínimo 8 caracteres"
-      autocomplete="new-password"
-      hint="Mínimo de 8 caracteres"
-      :required="true"
-    )
-
-    AppInput(
-      id="confirm-password"
-      v-model="confirmPassword"
-      type="password"
-      label="Confirmar nova senha"
-      placeholder="Repita a nova senha"
-      autocomplete="new-password"
-      :error="confirmError"
-      :required="true"
-    )
-
-    AppButton(type="submit" :loading="authStore.isLoading" class="w-full justify-center")
-      KeyRound(class="size-4")
-      | Redefinir senha
-
-    RouterLink(
-      :to="{ name: 'login' }"
-      class="flex items-center justify-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-    )
-      ArrowLeft(class="size-4")
-      | Voltar para o login
+    form(@submit.prevent="handleResetPassword")
+      AppInput(
+        ref="passwordRef"
+        v-model="password"
+        type="password"
+        label="Nova senha"
+        placeholder="Mínimo 8 caracteres"
+        prefixIcon="lock"
+        autocomplete="new-password"
+        required
+      )
+      AppInput(
+        ref="confirmPasswordRef"
+        v-model="confirmPassword"
+        type="password"
+        label="Confirmar nova senha"
+        placeholder="Repita a nova senha"
+        prefixIcon="lock"
+        autocomplete="new-password"
+        required
+      )
+      AppButton(
+        type="submit"
+        :loading="authStore.isLoading"
+        fullWidth
+      ) Redefinir senha
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter, RouterLink } from 'vue-router'
-import { KeyRound, ArrowLeft, CheckCircle, AlertTriangle } from 'lucide-vue-next'
-import { useAuthStore } from '@/stores/auth'
+import { ref, onMounted } from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import AppInput from '@/components/ui/AppInput.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppAlert from '@/components/ui/AppAlert.vue'
+import AppInput from '@/components/appComponents/AppInput.vue'
+import AppButton from '@/components/appComponents/AppButton.vue'
+import { useAuthStore } from '@/stores/auth'
+import { validateFields } from '@/shared/utils'
+import type { ValidatableRef } from '@/shared/utils'
 
-const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const password = ref('')
 const confirmPassword = ref('')
-const confirmError = ref('')
-const success = ref(false)
-const invalidToken = ref(false)
+const tokenInvalid = ref(false)
+const resetSuccess = ref(false)
+const countdown = ref(3)
 
-const token = computed(() => route.query.token as string | undefined)
+const passwordRef = ref<ValidatableRef | null>(null)
+const confirmPasswordRef = ref<ValidatableRef | null>(null)
 
 onMounted(() => {
-  if (!token.value) {
-    invalidToken.value = true
-  }
-  authStore.clearError()
+  const token = route.query.token as string
+  if (!token) tokenInvalid.value = true
 })
 
-const handleSubmit = async () => {
-  confirmError.value = ''
-  if (password.value !== confirmPassword.value) {
-    confirmError.value = 'As senhas não coincidem'
-    return
-  }
+const handleResetPassword = async () => {
+  if (!validateFields([passwordRef.value, confirmPasswordRef.value])) return
+
   if (password.value.length < 8) {
-    confirmError.value = 'A senha deve ter pelo menos 8 caracteres'
+    authStore.error = 'A senha deve ter no mínimo 8 caracteres'
     return
   }
+
+  if (password.value !== confirmPassword.value) {
+    authStore.error = 'As senhas não conferem'
+    return
+  }
+
   try {
-    await authStore.resetPassword(token.value!, password.value)
-    success.value = true
-    setTimeout(() => router.push({ name: 'login' }), 3000)
+    const token = route.query.token as string
+    await authStore.resetPassword(token, password.value)
+    resetSuccess.value = true
+    const interval = setInterval(() => {
+      countdown.value--
+      if (countdown.value <= 0) {
+        clearInterval(interval)
+        router.push({ name: 'login' })
+      }
+    }, 1000)
   } catch {
-    // error is set in the store
+    // error is handled by the store
   }
 }
 </script>

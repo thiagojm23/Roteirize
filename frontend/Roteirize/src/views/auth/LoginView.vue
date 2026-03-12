@@ -1,72 +1,72 @@
 <template lang="pug">
-AuthLayout(
-  title="Bem-vindo de volta"
-  subtitle="Entre na sua conta para continuar"
-)
-  form(@submit.prevent="handleLogin" class="flex flex-col gap-4")
-    AppAlert(v-if="authStore.error" variant="error" :description="authStore.error")
+AuthLayout(title="Entrar" subtitle="Acesse sua conta para continuar")
+  //- Error snackbar
+  div.snackbar.error(:class="{ 'active': !!authStore.error }")
+    i warning
+    span {{ authStore.error }}
 
+  form(@submit.prevent="handleLogin")
     AppInput(
-      id="email"
+      ref="emailRef"
       v-model="email"
       type="email"
       label="E-mail"
-      placeholder="voce@exemplo.com"
+      placeholder="seu@email.com"
+      prefixIcon="mail"
       autocomplete="email"
-      :required="true"
+      required
     )
+    AppInput(
+      ref="passwordRef"
+      v-model="password"
+      type="password"
+      label="Senha"
+      placeholder="••••••••"
+      prefixIcon="lock"
+      autocomplete="current-password"
+      required
+    )
+    nav.right-align
+      RouterLink.link(:to="{ name: 'forgot-password' }") Esqueceu a senha?
+    AppButton(
+      type="submit"
+      :loading="authStore.isLoading"
+      fullWidth
+    ) Entrar
 
-    div(class="flex flex-col gap-1.5")
-      div(class="flex items-center justify-between")
-        Label(for="password" class="text-sm font-medium")
-          | Senha
-          span(class="ml-0.5 text-destructive") *
-        RouterLink(
-          :to="{ name: 'forgot-password' }"
-          class="text-xs text-primary hover:text-primary/80 transition-colors"
-        ) Esqueceu a senha?
-      AppInput(
-        id="password"
-        v-model="password"
-        type="password"
-        placeholder="••••••••"
-        autocomplete="current-password"
-        :required="true"
-      )
+  div.divider
 
-    AppButton(type="submit" :loading="authStore.isLoading" class="w-full justify-center mt-1")
-      | Entrar
-
-  div(class="mt-6 text-center text-sm text-muted-foreground")
-    | Não tem uma conta?&nbsp;
-    RouterLink(
-      :to="{ name: 'register' }"
-      class="font-medium text-primary hover:text-primary/80 transition-colors"
-    ) Criar conta grátis
+  p.center-align
+    | Não tem uma conta?
+    |
+    RouterLink.link(:to="{ name: 'register' }") Cadastre-se
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthLayout from '@/components/layout/AuthLayout.vue'
-import AppInput from '@/components/ui/AppInput.vue'
-import AppButton from '@/components/ui/AppButton.vue'
-import AppAlert from '@/components/ui/AppAlert.vue'
-import { Label } from '@/components/ui/label'
+import AppInput from '@/components/appComponents/AppInput.vue'
+import AppButton from '@/components/appComponents/AppButton.vue'
+import { useAuthStore } from '@/stores/auth'
+import { validateFields } from '@/shared/utils'
+import type { ValidatableRef } from '@/shared/utils'
 
-const authStore = useAuthStore()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
+const emailRef = ref<ValidatableRef | null>(null)
+const passwordRef = ref<ValidatableRef | null>(null)
 
 const handleLogin = async () => {
+  if (!validateFields([emailRef.value, passwordRef.value])) return
   try {
     await authStore.login(email.value, password.value)
     router.push({ name: 'dashboard' })
   } catch {
-    // error is set in the store
+    // error is handled by the store
   }
 }
 </script>

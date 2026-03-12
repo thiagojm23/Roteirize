@@ -5,7 +5,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition
-    if (to.hash) return { el: to.hash, behavior: 'smooth' }
+    if (to.hash) return { el: to.hash, behavior: 'smooth', top: 64 }
     return { top: 0 }
   },
   routes: [
@@ -45,13 +45,13 @@ const router = createRouter({
 
     // Protected routes
     {
-      path: '/app',
+      path: '/dashboard',
       name: 'dashboard',
       component: () => import('@/views/DashboardView.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
-      path: '/app/perfil',
+      path: '/perfil',
       name: 'profile',
       component: () => import('@/views/DashboardView.vue'), // placeholder
       meta: { requiresAuth: true },
@@ -65,13 +65,17 @@ const router = createRouter({
   ],
 })
 
+let isFirtsNavigation = true
+
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
 
   // Try to restore session on first navigation
-  if (!authStore.isAuthenticated) {
+  if (!authStore.isAuthenticated && isFirtsNavigation) {
     await authStore.fetchCurrentUser()
   }
+
+  isFirtsNavigation = false
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } }

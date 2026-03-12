@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+declare function ui(action: string, value?: string): string
+
 export type Theme = 'light' | 'dark' | 'system'
 
 export const useThemeStore = defineStore('theme', () => {
@@ -8,11 +10,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   const applyTheme = (dark: boolean) => {
     isDark.value = dark
-    if (dark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    ui('mode', dark ? 'dark' : 'light')
   }
 
   /** Initializes the theme from localStorage or system preference. */
@@ -23,7 +21,6 @@ export const useThemeStore = defineStore('theme', () => {
     } else if (saved === 'light') {
       applyTheme(false)
     } else {
-      // Fallback to system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       applyTheme(prefersDark)
     }

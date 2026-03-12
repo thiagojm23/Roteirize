@@ -2,6 +2,8 @@ import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
+// @ts-expect-error - No types available for this plugin
+import pluginVuePug from 'eslint-plugin-vue-pug'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from 'eslint-config-prettier/flat'
 
@@ -19,6 +21,7 @@ export default defineConfigWithVueTs(
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
   ...pluginVue.configs['flat/essential'],
+  ...pluginVuePug.configs['flat/vue3-recommended'],
   vueTsConfigs.recommended,
 
   {

@@ -1,0 +1,7 @@
+﻿services:
+  roteirize:
+    image: roteirize
+    build:
+      context: .
+      dockerfile: Roteirize/Dockerfile
+

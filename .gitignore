@@ -3,6 +3,8 @@
 # ============================================================
 bin/
 obj/
+[Bb]in/
+[Oo]bj/
 *.user
 *.suo
 *.userosscache
@@ -67,8 +69,6 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
-[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 TestResult.xml
@@ -83,17 +83,19 @@ AutoTest.Net/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.VisualState.xml
-TestResult.xml
 [Tt]est[Rr]esult*/
 .ncrunchsolution
 *.dotCover
 
 # ============================================================
-# Vue 3 / Node.js / Frontend
+# Vue 3 / Node.js / Vite / Frontend
 # ============================================================
 node_modules/
 dist/
 dist-ssr/
+**/wwwroot/dist/
+**/wwwroot/assets/
+**/ClientApp/dist/
 *.local
 .cache/
 .parcel-cache/
@@ -109,15 +111,12 @@ dist-ssr/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# npm / yarn / pnpm
+# Logs de gerenciadores de pacotes
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .pnpm-store/
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # ============================================================
 # Docker
@@ -135,8 +134,8 @@ docker-compose.*.local.yml
 !.env.example
 !.env.template
 *.env
+# Ignora todos os appsettings gerados para ambientes específicos (ex: Development, Production, Local)
 appsettings.*.json
-!appsettings.Development.json
 secrets.json
 local.settings.json
 *.pfx
@@ -162,6 +161,13 @@ logs/
 *.swp
 *.swo
 *~
+*.user
+*.suo
+*.sln.docstates
+riderModule.iml
+_ReSharper.Caches/
+.vs/
+*.DotSettings.user
 
 # ============================================================
 # OS
@@ -175,10 +181,13 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
+CLAUDE.md
+GEMINI.md
+
 # ============================================================
 # Outros
 # ============================================================
-.github
+.github/
 *.bak
 *.orig
 *.patch

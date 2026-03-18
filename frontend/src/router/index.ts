@@ -40,22 +40,40 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/app/itineraries',
+      name: 'itineraries',
+      component: () => import('@/features/itinerary/views/ItineraryListView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/app/itineraries/new',
+      name: 'itinerary-create',
+      component: () => import('@/features/itinerary/views/ItineraryCreateView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/app/itineraries/:id',
+      name: 'itinerary-plan',
+      component: () => import('@/features/itinerary/views/ItineraryPlanView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },
   ],
 })
 
-router.beforeEach((to) => {
-  const auth = useAuthStore()
+// router.beforeEach((to) => {
+//   const auth = useAuthStore()
 
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    return { name: 'login', query: { redirect: to.fullPath } }
-  }
+//   if (to.meta.requiresAuth && !auth.isAuthenticated) {
+//     return { name: 'login', query: { redirect: to.fullPath } }
+//   }
 
-  if (to.meta.guestOnly && auth.isAuthenticated) {
-    return { name: 'dashboard' }
-  }
-})
+//   if (to.meta.guestOnly && auth.isAuthenticated) {
+//     return { name: 'dashboard' }
+//   }
+// })
 
 export default router

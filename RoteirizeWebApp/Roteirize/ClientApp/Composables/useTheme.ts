@@ -1,26 +1,20 @@
-import { ref } from 'vue'
+import { reactive, ref } from "vue";
 
-const isDark = ref(document.documentElement.classList.contains('dark'))
+const stored = localStorage.getItem("roteirize-theme");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const isDark = ref(stored ? stored === "dark" : prefersDark);
+document.documentElement.classList.toggle("dark", isDark.value);
 
 export function useTheme() {
   function setTheme(dark: boolean) {
-    isDark.value = dark
-    document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('roteirize-theme', dark ? 'dark' : 'light')
+    isDark.value = dark;
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("roteirize-theme", dark ? "dark" : "light");
   }
 
   function toggle() {
-    setTheme(!isDark.value)
+    setTheme(!isDark.value);
   }
 
-  function initialize() {
-    const stored = localStorage.getItem('roteirize-theme')
-    if (stored) {
-      setTheme(stored === 'dark')
-    } else {
-      setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches)
-    }
-  }
-
-  return { isDark, setTheme, toggle, initialize }
+  return reactive({ isDark, setTheme, toggle });
 }

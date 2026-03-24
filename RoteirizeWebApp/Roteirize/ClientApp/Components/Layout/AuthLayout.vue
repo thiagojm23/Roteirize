@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
-import { useTheme } from '@/Composables/useTheme'
-import { Compass, Sun, Moon } from 'lucide-vue-next'
-import AppCard from '@/Components/App/AppCard.vue'
+import { Link } from "@inertiajs/vue3";
+import { useTheme } from "@/Composables/useTheme";
+import { Compass, Sun, Moon } from "lucide-vue-next";
+import AppCard from "@/Components/App/AppCard.vue";
 
-const theme = useTheme()
+const theme = useTheme();
 </script>

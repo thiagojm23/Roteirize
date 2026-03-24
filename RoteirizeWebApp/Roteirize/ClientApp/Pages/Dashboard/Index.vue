@@ -1,6 +1,6 @@
 <template lang="pug">
 .flex.min-h-screen.bg-background
-  AppSidenav(collapseMode="icons")
+  AppSidenav
 
   .flex-1.flex.flex-col
     //- Page header
@@ -65,28 +65,34 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
-import AppSidenav from '@/Components/Layout/AppSidenav.vue'
-import AppButton from '@/Components/App/AppButton.vue'
-import AppCard from '@/Components/App/AppCard.vue'
-import { MapPin, Plus, Calendar, Users } from 'lucide-vue-next'
-import type { Itinerary, User } from '@/Types/itinerary'
+import { computed } from "vue";
+import { Link } from "@inertiajs/vue3";
+import AppSidenav from "@/Components/Layout/AppSidenav.vue";
+import AppButton from "@/Components/App/AppButton.vue";
+import AppCard from "@/Components/App/AppCard.vue";
+import { MapPin, Plus, Calendar, Users } from "lucide-vue-next";
+import type { Itinerary, User } from "@/Types/itinerary";
 
 const props = defineProps<{
-  user?: User | null
-  itineraries: Itinerary[]
-  collaborations: number
-}>()
+  user?: User | null;
+  itineraries: Itinerary[];
+  collaborations: number;
+}>();
 
 const nextTrip = computed(() => {
   const upcoming = props.itineraries
     .filter((i) => new Date(i.startDate) > new Date())
-    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-  if (!upcoming.length) return '—'
-  return new Date(upcoming[0]!.startDate + 'T00:00:00').toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-  })
-})
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
+  if (!upcoming.length) return "—";
+  return new Date(upcoming[0]!.startDate + "T00:00:00").toLocaleDateString(
+    "pt-BR",
+    {
+      day: "2-digit",
+      month: "short",
+    },
+  );
+});
 </script>

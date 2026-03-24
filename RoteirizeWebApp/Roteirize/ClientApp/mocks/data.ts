@@ -1,0 +1,160 @@
+export const mockUser = {
+  id: "user-1",
+  name: "Thiago",
+  email: "thiago@example.com",
+};
+
+export const mockItineraries = [
+  {
+    id: "1",
+    title: "Rio de Janeiro → Búzios",
+    status: "planning",
+    startDate: "2026-04-15",
+    endDate: "2026-04-22",
+    ownerId: "user-1",
+    destinations: [
+      {
+        id: "d1",
+        name: "Rio de Janeiro",
+        country: "Brasil",
+        lat: -22.9068,
+        lng: -43.1729,
+        durationDays: 3,
+        order: 1,
+      },
+      {
+        id: "d2",
+        name: "Búzios",
+        country: "Brasil",
+        lat: -22.7469,
+        lng: -41.8817,
+        durationDays: 4,
+        order: 2,
+      },
+    ],
+  },
+  {
+    id: "2",
+    title: "Lisboa → Porto",
+    status: "draft",
+    startDate: "2026-06-01",
+    endDate: "2026-06-10",
+    ownerId: "user-1",
+    destinations: [
+      {
+        id: "d3",
+        name: "Lisboa",
+        country: "Portugal",
+        lat: 38.7223,
+        lng: -9.1393,
+        durationDays: 5,
+        order: 1,
+      },
+      {
+        id: "d4",
+        name: "Porto",
+        country: "Portugal",
+        lat: 41.1579,
+        lng: -8.6291,
+        durationDays: 4,
+        order: 2,
+      },
+    ],
+  },
+];
+
+export const mockItineraryPlan = {
+  itinerary: {
+    id: "1",
+    title: "Rio de Janeiro → Búzios",
+    status: "planning",
+    startDate: "2026-04-15",
+    endDate: "2026-04-22",
+    ownerId: "user-1",
+    destinations: [
+      {
+        id: "d1",
+        name: "Rio de Janeiro",
+        country: "Brasil",
+        lat: -22.9068,
+        lng: -43.1729,
+        durationDays: 3,
+        order: 1,
+      },
+      {
+        id: "d2",
+        name: "Búzios",
+        country: "Brasil",
+        lat: -22.7469,
+        lng: -41.8817,
+        durationDays: 4,
+        order: 2,
+      },
+    ],
+  },
+  dayPlans: [
+    {
+      dayNumber: 1,
+      date: "2026-04-15",
+      entries: [
+        {
+          id: "e1",
+          hourStart: "09:00",
+          hourEnd: "12:00",
+          locationName: "Cristo Redentor",
+          cost: 80.0,
+          classification: "tour",
+          photos: [],
+          notes: "Chegar cedo para evitar filas",
+        },
+        {
+          id: "e2",
+          hourStart: "13:00",
+          hourEnd: "15:00",
+          locationName: "Almoço em Copacabana",
+          cost: 120.0,
+          classification: "food",
+          photos: [],
+          notes: "",
+        },
+      ],
+    },
+    {
+      dayNumber: 2,
+      date: "2026-04-16",
+      entries: [
+        {
+          id: "e3",
+          hourStart: "10:00",
+          hourEnd: "16:00",
+          locationName: "Pão de Açúcar",
+          cost: 130.0,
+          classification: "tour",
+          photos: [],
+          notes: "",
+        },
+      ],
+    },
+  ],
+  costSummary: {
+    totalSpent: 330.0,
+    budgetRemaining: 4670.0,
+    perDayAverage: 165.0,
+    byCategory: {
+      food: 120.0,
+      tour: 210.0,
+      museum: 0.0,
+      transport: 0.0,
+      hotel: 0.0,
+      shopping: 0.0,
+      entertainment: 0.0,
+      other: 0.0,
+    },
+  },
+  budget: {
+    totalBudget: 5000.0,
+    maxPerDay: 500.0,
+    travelers: 2,
+    currency: "BRL",
+  },
+};

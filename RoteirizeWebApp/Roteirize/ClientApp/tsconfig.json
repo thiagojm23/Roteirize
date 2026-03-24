@@ -20,5 +20,6 @@
       "@/*": ["./*"]
     }
   },
+  "vueCompilerOptions": { "plugins": ["@vue/language-plugin-pug"] },
   "include": ["**/*.ts", "**/*.vue", "vite-env.d.ts"]
 }

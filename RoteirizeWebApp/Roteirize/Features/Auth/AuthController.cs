@@ -3,56 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Roteirize.Features.Auth;
 
+// Inertia page rendering only — auth API logic is in MinimalAPI endpoints (Login.cs, Register.cs, etc.)
 public class AuthController : Controller
 {
     [HttpGet("/login")]
-    public IActionResult Login()
-    {
-        return Inertia.Render("Auth/Login");
-    }
-
-    [HttpPost("/auth/login")]
-    public IActionResult LoginPost([FromForm] LoginRequest request)
-    {
-        // TODO: Implement real authentication
-        // For now, redirect to dashboard on any login attempt
-        return RedirectToAction("Index", "Dashboard");
-    }
+    public IActionResult Login() => Inertia.Render("Auth/Login");
 
     [HttpGet("/cadastro")]
-    public IActionResult Register()
-    {
-        return Inertia.Render("Auth/Register");
-    }
-
-    [HttpPost("/auth/register")]
-    public IActionResult RegisterPost([FromForm] RegisterRequest request)
-    {
-        // TODO: Implement real registration
-        return RedirectToAction("Index", "Dashboard");
-    }
+    public IActionResult Register() => Inertia.Render("Auth/Register");
 
     [HttpGet("/esqueci-senha")]
-    public IActionResult ForgotPassword()
-    {
-        return Inertia.Render("Auth/ForgotPassword");
-    }
+    public IActionResult ForgotPassword() => Inertia.Render("Auth/ForgotPassword");
 
-    [HttpPost("/auth/forgot-password")]
-    public IActionResult ForgotPasswordPost([FromForm] ForgotPasswordRequest request)
-    {
-        // TODO: Implement real password recovery
-        return Inertia.Render("Auth/ForgotPassword");
-    }
-
-    [HttpPost("/auth/logout")]
-    public IActionResult Logout()
-    {
-        // TODO: Implement real logout
-        return Redirect("/");
-    }
+    [HttpGet("/redefinir-senha")]
+    public IActionResult ResetPassword([FromQuery] string token)
+        => Inertia.Render("Auth/ResetPassword", new { token });
 }
-
-public record LoginRequest(string Email, string Password);
-public record RegisterRequest(string Name, string Email, string Cpf, string Password);
-public record ForgotPasswordRequest(string Email);

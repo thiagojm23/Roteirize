@@ -48,29 +48,29 @@ header.sticky.top-0.z-50.w-full.border-b.border-border.backdrop-blur(class="bg-b
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
-import { useTheme } from '@/Composables/useTheme'
-import { Menu, X, Sun, Moon, Compass } from 'lucide-vue-next'
-import AppButton from '@/Components/App/AppButton.vue'
+import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
+import { useTheme } from "@/Composables/useTheme";
+import { Menu, X, Sun, Moon, Compass } from "lucide-vue-next";
+import AppButton from "@/Components/App/AppButton.vue";
 
-const theme = useTheme()
-const mobileMenuOpen = ref(false)
+const theme = useTheme();
+const mobileMenuOpen = ref(false);
 
 const navLinks = [
-  { label: 'Funcionalidades', href: '#features' },
-  { label: 'Como funciona', href: '#how-it-works' },
-  { label: 'Depoimentos', href: '#testimonials' },
-]
+  { label: "Funcionalidades", href: "#features" },
+  { label: "Como funciona", href: "#how-it-works" },
+  { label: "Depoimentos", href: "#testimonials" },
+];
 
 function scrollToSection(href: string) {
-  mobileMenuOpen.value = false
-  const currentPath = window.location.pathname
-  if (currentPath !== '/') {
-    window.location.href = '/' + href
-    return
+  mobileMenuOpen.value = false;
+  const currentPath = window.location.pathname;
+  if (currentPath !== "/") {
+    window.location.href = "/" + href;
+    return;
   }
-  const el = document.querySelector(href)
-  el?.scrollIntoView({ behavior: 'smooth' })
+  const el = document.querySelector(href);
+  el?.scrollIntoView({ behavior: "smooth" });
 }
 </script>

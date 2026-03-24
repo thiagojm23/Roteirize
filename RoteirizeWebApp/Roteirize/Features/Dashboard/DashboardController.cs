@@ -1,8 +1,10 @@
 using InertiaCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Roteirize.Features.Dashboard;
 
+// [Authorize]
 public class DashboardController : Controller
 {
     [HttpGet("/app")]
